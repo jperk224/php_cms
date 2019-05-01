@@ -17,11 +17,9 @@ if (!$connection) {
 echo "Success: A proper connection to MySQL was made!" . nl2br('<br>');
 echo "Host information: " . mysqli_get_host_info($connection) . nl2br('<br>');
 
-// mysqli_close($connection);
-
 $sql = "SELECT *
         FROM articles
-        ORDER BY published_at;";
+        WHERE id = " . $_GET["id"] . ";";
 
 $results = mysqli_query($connection, $sql);
 
@@ -29,7 +27,7 @@ if ($results === false) {
     echo mysqli_error($connection) . nl2br('<br>');
     echo mysqli_errno($connection) . nl2br('<br>');
 } else {
-    $articles = mysqli_fetch_all($results, MYSQLI_ASSOC);
+    $article = mysqli_fetch_assoc($results);
 }
 
 ?>
@@ -49,19 +47,13 @@ if ($results === false) {
         <h1>My Blog</h1>
     </header>
     <main>
-        <?php if (empty($articles)) : ?>
-            <p>No articles found.</p>
+        <?php if ($article === null) : ?>
+            <p>Article was not found.</p>
         <?php else : ?>
-            <ul>
-                <?php foreach ($articles as $article) : ?>
-                    <li>
-                        <article>
-                            <h2><a href="article.php?id=<?= $article["id"] ?>"><?= $article["title"]; ?></a></h2>
-                            <p><?= $article["content"]; ?></p>
-                        </article>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+            <article>
+                <h2><?= $article["title"]; ?></h2>
+                <p><?= $article["content"]; ?></p>
+            </article>
         <?php endif; ?>
     </main>
 </body>
