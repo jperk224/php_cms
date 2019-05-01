@@ -1,33 +1,23 @@
 <?php
 
-$db_host = "localhost";
-$db_name = "php_cms";
-$db_user = "cms_www";
-$db_password = "cn3WUv8WnxTwvzPo";
+require 'partials/database.php';
 
-$connection = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-
-if (!$connection) {
-    echo "Error: Unable to connect to MySQL." . nl2br('<br>');
-    echo "Debugging errno: " . mysqli_connect_errno() . nl2br('<br>'); //Error code
-    echo "Debugging error: " . mysqli_connect_error() . nl2br('<br>'); //Error text
-    exit;
-}
-
-echo "Success: A proper connection to MySQL was made!" . nl2br('<br>');
-echo "Host information: " . mysqli_get_host_info($connection) . nl2br('<br>');
+if (isset($_GET["id"]) && is_numeric($_GET["id"])){
 
 $sql = "SELECT *
         FROM articles
         WHERE id = " . $_GET["id"] . ";";
 
-$results = mysqli_query($connection, $sql);
+$results = mysqli_query ($connection, $sql);
 
 if ($results === false) {
-    echo mysqli_error($connection) . nl2br('<br>');
-    echo mysqli_errno($connection) . nl2br('<br>');
+echo mysqli_error ($connection) . nl2br ('<br>');
+echo mysqli_errno ($connection) . nl2br ('<br>');
 } else {
-    $article = mysqli_fetch_assoc($results);
+$article = mysqli_fetch_assoc ($results);
+}
+} else {
+    $article = null;
 }
 
 ?>
